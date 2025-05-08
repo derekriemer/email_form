@@ -38,7 +38,6 @@ jobs:
 
       - name: Set secrets based on environment
         run: |
-          TAG="${GITHUB_REF##*/}"
           if [[ "${{ steps.env.outputs.env }}" == "prod" ]]; then
             echo "SSH_USER=${{ secrets.SSH_USER_PROD }}" >> $GITHUB_ENV
             echo "DOCKER_PORT=${{ secrets.DOCKER_PORT_PROD }}" >> $GITHUB_ENV
@@ -51,7 +50,7 @@ jobs:
           echo "MAILGUN_API_KEY=${{ secrets.MAILGUN_API_KEY }}" >> $GITHUB_ENV
           echo "MAILGUN_DOMAIN=${{ secrets.MAILGUN_DOMAIN }}" >> $GITHUB_ENV
           echo "RECIPIENT_EMAIL=${{ secrets.RECIPIENT_EMAIL }}" >> $GITHUB_ENV
-          echo "APP_NAME=${ORIG_APP_NAME}-${TAG}" >> $GITHUB_ENV
+          echo "APP_NAME=${ORIG_APP_NAME}-${{ steps.env.outputs.env }}" >> $GITHUB_ENV
 
       - name: Build Docker image
         run: |
