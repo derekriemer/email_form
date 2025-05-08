@@ -2,6 +2,7 @@ from os import getenv
 
 from flask import Flask, request, render_template_string
 import requests
+from email.utils import parseaddr
 
 app = Flask(__name__)
 
@@ -59,6 +60,19 @@ def contact():
         if not all([name, email, subject, message]):
             raise ValueError("All fields are required")
 
+        # Field-specific validations
+        # if name.find("\n") != -1:
+            # raise ValueError(
+            # "Rejecting name with newlines to prevent header injection attacks.")
+        # if email.find("\n") != -1:
+            # raise ValueError(
+            # "Rejecting email with newlines to prevent header injection attacks.")
+        if '@' not in parseaddr(email)[1]:
+            raise ValueError("Invalid email address format")
+        # if subject.find("\n") != -1:
+            # raise ValueError(
+            # "Rejecting subject with newlines to prevent header injection attacks.")
+
         # Mailgun configuration
         MAILGUN_API_KEY = getenv('MAILGUN_API_KEY')
         MAILGUN_DOMAIN = getenv('MAILGUN_DOMAIN')
@@ -75,7 +89,7 @@ def contact():
         Subject: {subject}
 
         Message:
-        {message}
+{message}
         """
 
         # Send email using Mailgun API
@@ -85,9 +99,10 @@ def contact():
             data={
                 "from": f"{name} <noreply@{MAILGUN_DOMAIN}>",
                 "to": RECIPIENT_EMAIL,
+                "reply-to": email,
                 "subject": f"Contact Form: {subject}",
                 "text": email_content
-            }
+            }, timeout=10
         )
 
         response.raise_for_status()
