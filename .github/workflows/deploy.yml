@@ -10,7 +10,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      APP_NAME: email_form
+      ORIG_APP_NAME: email_form
       INTERNAL_PORT: 5000
 
     steps:
@@ -50,6 +50,7 @@ jobs:
           echo "MAILGUN_API_KEY=${{ secrets.MAILGUN_API_KEY }}" >> $GITHUB_ENV
           echo "MAILGUN_DOMAIN=${{ secrets.MAILGUN_DOMAIN }}" >> $GITHUB_ENV
           echo "RECIPIENT_EMAIL=${{ secrets.RECIPIENT_EMAIL }}" >> $GITHUB_ENV
+          echo "APP_NAME=$TRUE_APP_NAME-$TAG" >> $GITHUB_ENV
 
       - name: Build Docker image
         run: |
