@@ -1,0 +1,16 @@
+[Unit]
+Description=Email Form
+After=network.target
+
+[Service]
+User=derek
+WorkingDirectory=/home/derek/email_form
+Environment="PATH=/home/riemerd/email_app/venv/bin"
+Environment="MAILGUN_API_KEY=<api-key>>"
+Environment="MAILGUN_DOMAIN=<yourdomain.com>"
+Environment="RECIPIENT_EMAIL=contact-form@<yourdomain>"
+ExecStart=/home/python/email_form/venv/bin/gunicorn -w 4 -b unix:email_form.sock app:app
+
+[Install]
+WantedBy=multi-user.target
+
