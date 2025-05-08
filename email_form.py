@@ -99,7 +99,7 @@ def contact():
             data={
                 "from": f"{name} <noreply@{MAILGUN_DOMAIN}>",
                 "to": RECIPIENT_EMAIL,
-                "reply-to": email,
+                "H:Reply-To": email,
                 "subject": f"Contact Form: {subject}",
                 "text": email_content
             }, timeout=10
