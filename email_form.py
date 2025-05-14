@@ -51,6 +51,10 @@ ERROR_PAGE = """
 def contact():
     try:
         # Get form data
+        honey = request.form.get('phone')
+        if honey:
+            # reject bots that fill out my hidden phone number field.
+            return render_template_string(SUCCESS_PAGE)
         name = request.form.get('name')
         email = request.form.get('email')
         subject = request.form.get('subject')
